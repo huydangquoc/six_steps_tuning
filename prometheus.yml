@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+rule_files:
+ # - rules1.yml
+ # - rules2.yml
+ # - rules3.yml
+ # - rules4.yml
+ # - rules5.yml
+ - rules6.yml
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - localhost:9093
+scrape_configs:
+ - job_name: example
+   static_configs:
+    - targets:
+      - localhost:8000

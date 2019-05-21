@@ -1,0 +1,32 @@
+# 5: Multiple Burn Rate Alerts
+groups:
+ - name: slo_rules
+   rules:
+    - record: job:slo_errors_per_request:ratio_rate1h
+      expr:
+        sum(rate(request_exceptions_total[1h]))
+          /
+        sum(rate(requests_total[1h]))
+    - record: job:slo_errors_per_request:ratio_rate6h
+      expr:
+        sum(rate(request_exceptions_total[6h]))
+          /
+        sum(rate(requests_total[6h]))
+    - record: job:slo_errors_per_request:ratio_rate3d
+      expr:
+        sum(rate(request_exceptions_total[3d]))
+          /
+        sum(rate(requests_total[3d]))
+    - alert: HighErrorRate
+      expr:
+        (
+          job:slo_errors_per_request:ratio_rate1h > (14.4*0.001)
+        or
+          job:slo_errors_per_request:ratio_rate6h > (6*0.001)
+        )
+      labels:
+        severity: page
+    - alert: TrendingHighErrorRate
+      expr: job:slo_errors_per_request:ratio_rate3d > 0.001
+      labels:
+        severity: ticket

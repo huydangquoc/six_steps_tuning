@@ -1,0 +1,11 @@
+# 2: Increased Alert Window
+groups:
+ - name: slo_rules
+   rules:
+    - record: job:slo_errors_per_request:ratio_rate36h
+      expr:
+        sum(rate(request_exceptions_total[36h]))
+          /
+        sum(rate(requests_total[36h]))
+    - alert: HighErrorRate
+      expr: job:slo_errors_per_request:ratio_rate36h >= 0.001

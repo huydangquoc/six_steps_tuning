@@ -1,0 +1,12 @@
+# 3: Incrementing Alert Duration
+groups:
+ - name: slo_rules
+   rules:
+    - record: job:slo_errors_per_request:ratio_rate1m
+      expr:
+        sum(rate(request_exceptions_total[1m]))
+          /
+        sum(rate(requests_total[1m]))
+    - alert: HighErrorRate
+      expr: job:slo_errors_per_request:ratio_rate1m >= 0.001
+      for: 1h

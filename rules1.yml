@@ -1,0 +1,11 @@
+# 1: Target Error Rate ≥ SLO Threshold
+groups:
+ - name: slo_rules
+   rules:
+    - record: job:slo_errors_per_request:ratio_rate10m
+      expr:
+        sum(rate(request_exceptions_total[10m]))
+          /
+        sum(rate(requests_total[10m]))
+    - alert: HighErrorRate
+      expr: job:slo_errors_per_request:ratio_rate10m >= 0.001
